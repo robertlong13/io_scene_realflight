@@ -25,6 +25,8 @@ bl_info = {
     "blender": (2, 77, 0),
     "location": "File > Export",
     "description": "FBX export specifically for making custom aircraft for RealFlight 8",
+    "wiki_url": "https://github.com/robertlong13/io_scene_realflight/wiki"
+    "tracker_url": "https://github.com/robertlong13/io_scene_realflight/issues"
     "support": 'COMMUNITY',
     "category": "Import-Export",
 }
