@@ -2883,7 +2883,6 @@ def save_single(operator, scene, filepath="",
                 global_matrix=Matrix(),
                 apply_unit_scale=False,
                 global_scale=1.0,
-                apply_scale_options='FBX_SCALE_NONE',
                 axis_up="Z",
                 axis_forward="Y",
                 context_objects=None,
@@ -2922,19 +2921,17 @@ def save_single(operator, scene, filepath="",
     if 'OTHER' in object_types:
         object_types |= BLENDER_OTHER_OBJECT_TYPES
 
-    # Default Blender unit is equivalent to meter, while FBX one is centimeter...
-    unit_scale = units_blender_to_fbx_factor(scene) if apply_unit_scale else 100.0
-    if apply_scale_options == 'FBX_SCALE_NONE':
-        global_matrix = Matrix.Scale(unit_scale * global_scale, 4) * global_matrix
-        unit_scale = 1.0
-    elif apply_scale_options == 'FBX_SCALE_UNITS':
-        global_matrix = Matrix.Scale(global_scale, 4) * global_matrix
-    elif apply_scale_options == 'FBX_SCALE_CUSTOM':
-        global_matrix = Matrix.Scale(unit_scale, 4) * global_matrix
-        unit_scale = global_scale
-    else: # if apply_scale_options == 'FBX_SCALE_ALL':
-        unit_scale = global_scale * unit_scale
-
+    # Default Blender unit is equivalent to meter, while RealFlight assumes an
+    # FBX unit is equal to an inch. RealFlight also appears to ignore the unit
+    # scale factor in the FBX, so scaling must be applied globally
+    global_scale /= 0.0254
+    if (scene.unit_settings.system != 'NONE') and apply_unit_scale:
+        global_scale *= scene.unit_settings.scale_length
+    
+    global_matrix = Matrix.Scale(global_scale, 4) * global_matrix
+    # Realflight ignores this for now, so set it to 1.0 to be safe
+    unit_scale = 1.0
+        
     global_scale = global_matrix.median_scale
     global_matrix_inv = global_matrix.inverted()
     # For transforming mesh normals.

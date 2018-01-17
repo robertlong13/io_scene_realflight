@@ -21,7 +21,7 @@
 bl_info = {
     "name": "RealFlight FBX export",
     "author": "Bob Long",
-    "version": (0, 0, 1),
+    "version": (0, 1, 0),
     "blender": (2, 77, 0),
     "location": "File > Export",
     "description": "FBX export specifically for making custom aircraft for RealFlight 8",
@@ -53,7 +53,7 @@ from bpy_extras.io_utils import (
         )
 
 
-IOFBXOrientationHelper = orientation_helper_factory("IOFBXOrientationHelper", axis_forward='-Z', axis_up='Y')
+IOFBXOrientationHelper = orientation_helper_factory("IOFBXOrientationHelper", axis_forward='Y', axis_up='Z')
 
 class Export_RF_FBX(bpy.types.Operator, ExportHelper, IOFBXOrientationHelper):
     """Write a FBX file"""
@@ -101,25 +101,9 @@ class Export_RF_FBX(bpy.types.Operator, ExportHelper, IOFBXOrientationHelper):
             )
     # 7.4 only
     apply_unit_scale = BoolProperty(
-            name="Apply Unit",
+            name="Apply Unit Scale",
             description="Take into account current Blender units settings (if unset, raw Blender Units values are used as-is)",
             default=True,
-            )
-    # 7.4 only
-    apply_scale_options = EnumProperty(
-            items=(('FBX_SCALE_NONE', "All Local",
-                    "Apply custom scaling and units scaling to each object transformation, FBX scale remains at 1.0"),
-                   ('FBX_SCALE_UNITS', "FBX Units Scale",
-                    "Apply custom scaling to each object transformation, and units scaling to FBX scale"),
-                   ('FBX_SCALE_CUSTOM', "FBX Custom Scale",
-                    "Apply custom scaling to FBX scale, and units scaling to each object transformation"),
-                   ('FBX_SCALE_ALL', "FBX All",
-                    "Apply custom scaling and units scaling to FBX scale"),
-                   ),
-            name="Apply Scalings",
-            description="How to apply custom and units scalings in generated FBX file "
-                        "(Blender uses FBX scale to detect units on import, "
-                        "but many other applications do not handle the same way)",
             )
     # 7.4 only
     bake_space_transform = BoolProperty(
@@ -141,7 +125,7 @@ class Export_RF_FBX(bpy.types.Operator, ExportHelper, IOFBXOrientationHelper):
                    ('OTHER', "Other", "Other geometry types, like curve, metaball, etc. (converted to meshes)"),
                    ),
             description="Which kind of object to export",
-            default={'EMPTY', 'CAMERA', 'LAMP', 'ARMATURE', 'MESH', 'OTHER'},
+            default={'EMPTY', 'CAMERA', 'MESH', 'OTHER'},
             )
 
     use_mesh_modifiers = BoolProperty(
@@ -163,7 +147,7 @@ class Export_RF_FBX(bpy.types.Operator, ExportHelper, IOFBXOrientationHelper):
                    ),
             description="Export smoothing information "
                         "(prefer 'Normals Only' option if your target importer understand split normals)",
-            default='OFF',
+            default='FACE',
             )
     use_mesh_edges = BoolProperty(
             name="Loose Edges",
@@ -181,7 +165,7 @@ class Export_RF_FBX(bpy.types.Operator, ExportHelper, IOFBXOrientationHelper):
     use_custom_props = BoolProperty(
             name="Custom Properties",
             description="Export custom properties",
-            default=False,
+            default=True,
             )
     add_leaf_bones = BoolProperty(
             name="Add Leaf Bones",
@@ -231,7 +215,7 @@ class Export_RF_FBX(bpy.types.Operator, ExportHelper, IOFBXOrientationHelper):
     bake_anim = BoolProperty(
             name="Baked Animation",
             description="Export baked keyframe animation",
-            default=True,
+            default=False,
             )
     bake_anim_use_all_bones = BoolProperty(
             name="Key All Bones",
@@ -336,12 +320,11 @@ class Export_RF_FBX(bpy.types.Operator, ExportHelper, IOFBXOrientationHelper):
             if self.ui_tab == 'MAIN':
                 layout.prop(self, "use_selection")
 
-                col = layout.column(align=True)
-                row = col.row(align=True)
-                row.prop(self, "global_scale")
-                sub = row.row(align=True)
-                sub.prop(self, "apply_unit_scale", text="", icon='NDOF_TRANS')
-                col.prop(self, "apply_scale_options")
+                #col = layout.column(align=True)
+                #row = col.row(align=True)
+                layout.prop(self, "global_scale")
+                #sub = row.row(align=True)
+                layout.prop(self, "apply_unit_scale")#, text="", icon='NDOF_TRANS')
 
                 layout.prop(self, "axis_forward")
                 layout.prop(self, "axis_up")
