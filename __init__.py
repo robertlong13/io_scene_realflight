@@ -55,10 +55,10 @@ from bpy_extras.io_utils import (
 
 IOFBXOrientationHelper = orientation_helper_factory("IOFBXOrientationHelper", axis_forward='-Z', axis_up='Y')
 
-class ExportFBX(bpy.types.Operator, ExportHelper, IOFBXOrientationHelper):
+class Export_RF_FBX(bpy.types.Operator, ExportHelper, IOFBXOrientationHelper):
     """Write a FBX file"""
-    bl_idname = "export_scene.fbx"
-    bl_label = "Export FBX"
+    bl_idname = "export_scene.realflight_fbx"
+    bl_label = "Export RealFlight FBX"
     bl_options = {'UNDO', 'PRESET'}
 
     filename_ext = ".fbx"
@@ -445,11 +445,11 @@ class ExportFBX(bpy.types.Operator, ExportHelper, IOFBXOrientationHelper):
 
 
 def menu_func_export(self, context):
-    self.layout.operator(ExportFBX.bl_idname, text="RealFlight FBX (.fbx)")
+    self.layout.operator(Export_RF_FBX.bl_idname, text="RealFlight FBX (.fbx)")
 
 
 classes = (
-    ExportFBX,
+    Export_RF_FBX,
 )
 
 
