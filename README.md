@@ -10,9 +10,9 @@ Features:
   "UDP3DSMAX" property
   * The "UDP3DSMAX" property can also be set directly as a string, and "\r"
   is properly escaped as a carriage return
-  * By default, 1 Blender Unit exports to 1 meter in RealFlight
-    * This can be changed using the scale paramter in the export dialog or by
-    setting a unit scale factor in the scene settings
+* By default, 1 Blender Unit exports to 1 meter in RealFlight
+  * This can be changed using the scale paramter in the export dialog or by
+  setting a unit scale factor in the scene settings
 
 Upcoming Features:
 * Option to remap specular parameters to 3ds Max ranges
