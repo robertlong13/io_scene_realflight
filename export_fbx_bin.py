@@ -533,10 +533,19 @@ def fbx_data_element_custom_properties(props, bid):
     """
     Store custom properties of blender ID bid (any mapping-like object, in fact) into FBX properties props.
     """
+    # NUP values will be put in the 3DS Max user properties field
+    udp3dsmax = ''
+    
     for k, v in bid.items():
         list_val = getattr(v, "to_list", lambda: None)()
 
-        if isinstance(v, str):
+        if k.startswith('NUP_'):
+            udp3dsmax += str(k) + '=' + str(v) + '\r'
+        elif k == 'UDP3DSMAX':
+            udp3dsmax += str(v).replace('\\r','\r')
+            if udp3dsmax[-1] != '\r':
+                udp3dsmax += '\r'
+        elif isinstance(v, str):
             elem_props_set(props, "p_string", k.encode(), v, custom=True)
         elif isinstance(v, int):
             elem_props_set(props, "p_integer", k.encode(), v, custom=True)
@@ -549,6 +558,11 @@ def fbx_data_element_custom_properties(props, bid):
                 elem_props_set(props, "p_string", k.encode(), str(list_val), custom=True)
         else:
             elem_props_set(props, "p_string", k.encode(), str(v), custom=True)
+
+    if udp3dsmax:
+        # remove the last carriage return and write to 'UDP3DSMAX' property
+        udp3dsmax = udp3dsmax[0:-1]
+        elem_props_set(props, "p_string", b'UDP3DSMAX', udp3dsmax, custom=True)
 
 
 def fbx_data_empty_elements(root, empty, scene_data):
