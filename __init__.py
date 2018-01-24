@@ -21,7 +21,7 @@
 bl_info = {
     "name": "RealFlight FBX export",
     "author": "Bob Long",
-    "version": (0, 1, 0),
+    "version": (0, 2, 0),
     "blender": (2, 77, 0),
     "location": "File > Export",
     "description": "FBX export specifically for making custom aircraft for RealFlight 8",

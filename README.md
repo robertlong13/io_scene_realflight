@@ -13,8 +13,10 @@ Features:
 * By default, 1 Blender Unit exports to 1 meter in RealFlight
   * This can be changed using the scale paramter in the export dialog or by
   setting a unit scale factor in the scene settings
+* Specular hardness is properly mapped to the range expected by RealFlight
+  * Hardness of 1 maps to a Gloss value of 0%
+  * Hardness of 501 maps to a Gloss value of 100%
 
 Upcoming Features:
-* Option to remap specular parameters to 3ds Max ranges
 * Option to remove numbers appended to the end of duplicate names
 	* e.g., rename ~CS_COLL.012 to ~CS_COLL

@@ -392,8 +392,8 @@ def fbx_template_def_material(scene, settings, override_defaults=None, nbr_users
         # Not sure about the name, importer uses this (but ShininessExponent for tex prop name!)
         # And in fbx exported by sdk, you have one in template, the other in actual material!!! :/
         # For now, using both.
-        (b"Shininess", (20.0, "p_number", True)),
-        (b"ShininessExponent", (20.0, "p_number", True)),
+        (b"Shininess", (0.1, "p_number", True)),
+        (b"ShininessExponent", (0.1, "p_number", True)),
         (b"ReflectionColor", ((0.0, 0.0, 0.0), "p_color", True)),
         (b"ReflectionFactor", (1.0, "p_number", True)),
     ))
@@ -1270,10 +1270,10 @@ def fbx_data_material_elements(root, mat, scene_data):
         """
         if mat_type == b"Phong":
             elem_props_template_set(tmpl, props, "p_color", b"SpecularColor", mat.specular_color)
-            elem_props_template_set(tmpl, props, "p_number", b"SpecularFactor", mat.specular_intensity / 2.0)
+            elem_props_template_set(tmpl, props, "p_number", b"SpecularFactor", mat.specular_intensity)
             # See Material template about those two!
-            elem_props_template_set(tmpl, props, "p_number", b"Shininess", (mat.specular_hardness - 1.0) / 5.10)
-            elem_props_template_set(tmpl, props, "p_number", b"ShininessExponent", (mat.specular_hardness - 1.0) / 5.10)
+            elem_props_template_set(tmpl, props, "p_number", b"Shininess", (mat.specular_hardness - 1.0)/500.0)
+            elem_props_template_set(tmpl, props, "p_number", b"ShininessExponent", (mat.specular_hardness - 1.0)/500.0)
             elem_props_template_set(tmpl, props, "p_color", b"ReflectionColor", mat.mirror_color)
             elem_props_template_set(tmpl, props, "p_number", b"ReflectionFactor",
                                     mat.raytrace_mirror.reflect_factor if mat.raytrace_mirror.use else 0.0)
@@ -2602,7 +2602,7 @@ def fbx_header_elements(root, scene_data, time=None):
     time is expected to be a datetime.datetime object, or None (using now() in this case).
     """
     app_vendor = "Blender Foundation"
-    app_name = "Blender (stable FBX IO)"
+    app_name = "Blender (stable RealFlight FBX IO)"
     app_ver = bpy.app.version_string
 
     import addon_utils
