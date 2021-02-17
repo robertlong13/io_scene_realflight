@@ -551,11 +551,11 @@ def fbx_data_element_custom_properties(props, bid):
         list_val = getattr(v, "to_list", lambda: None)()
 
         if k.startswith('NUP_'):
-            udp3dsmax += str(k) + '=' + str(v) + '\r'
+            udp3dsmax += str(k) + '=' + str(v) + '\r\n'
         elif k == 'UDP3DSMAX':
-            udp3dsmax += str(v).replace('\\r','\r')
-            if udp3dsmax[-1] != '\r':
-                udp3dsmax += '\r'
+            udp3dsmax += str(v).replace('\\r\\n','\r\n')
+            if udp3dsmax[-2:] != '\r\n':
+                udp3dsmax += '\r\n'
         elif isinstance(v, str):
             elem_props_set(props, "p_string", k.encode(), v, custom=True)
         elif isinstance(v, int):
@@ -572,7 +572,7 @@ def fbx_data_element_custom_properties(props, bid):
             
     if udp3dsmax:
         # remove the last carriage return and write to 'UDP3DSMAX' property
-        udp3dsmax = udp3dsmax[0:-1]
+        udp3dsmax = udp3dsmax[0:-2]
         elem_props_set(props, "p_string", b'UDP3DSMAX', udp3dsmax, custom=True)
 
 
